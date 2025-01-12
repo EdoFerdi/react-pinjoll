@@ -1,91 +1,99 @@
 /* eslint-disable no-unused-vars */
-// src/components/Prodi/Create.jsx
+// src/components/Pinjaman/Create.jsx
 import React, { useState, useEffect } from "react"; // Import React dan hooks
 import axios from "axios"; // Import axios untuk melakukan HTTP request
 
-export default function CreateProdi() {
-  // Inisialisasi state untuk menyimpan nama prodi
-  const [namaProdi, setNamaProdi] = useState("");
-  // Inisialisasi state untuk menyimpan ID fakultas yang dipilih
-  const [kaprodi, setKaprodi] = useState("");
-  const [singkatan, setSingkatan] = useState("");
-  const [fakultasId, setFakultasId] = useState("");
-  // Inisialisasi state untuk menyimpan daftar fakultas
-  const [fakultasList, setFakultasList] = useState([]);
+export default function CreatePinjaman() {
+  // Inisialisasi state untuk menyimpan nama Pinjaman
+  const [pinjamen_id, setpinjamen_id] = useState("");
+  // Inisialisasi state untuk menyimpan ID Pinjaman yang dipilih
+  const [tgl_bayar, settgl_bayar] = useState("");
+  const [jumlah_bayar, setjumlah_bayar] = useState("");
+  const [sisa_bayar, setsisa_bayar] = useState("");
+  // Inisialisasi state untuk menyimpan daftar Pinjaman
+  const [pinjamanList, setpinjamanList] = useState([]);
   // Inisialisasi state untuk menyimpan pesan error
   const [error, setError] = useState("");
   // Inisialisasi state untuk menyimpan pesan sukses
   const [success, setSuccess] = useState("");
 
-  // Mengambil daftar fakultas dari API saat komponen dimuat
+  // Mengambil daftar Pinjaman dari API saat komponen dimuat
   useEffect(() => {
-    const fetchFakultas = async () => {
+    const fetchpinjaman = async () => {
       try {
         const response = await axios.get(
-          "https://academic-mi5a.vercel.app/api/api/fakultas"
+          "https://pinjol-wuxxs-projects.vercel.app/api/api/pinjaman"
         );
-        setFakultasList(response.data.data); // Simpan data fakultas ke dalam state
+        setpinjamanList(response.data.data); // Simpan data Pinjaman ke dalam state
       } catch (error) {
-        setError("Failed to fetch fakultas data");
+        setError("Failed to fetch Pinjaman data");
       }
     };
 
-    fetchFakultas(); // Panggil fungsi untuk mengambil data fakultas
+    fetchpinjaman(); // Panggil fungsi untuk mengambil data Pinjaman
   }, []); // Kosongkan array dependensi agar hanya dijalankan sekali saat komponen dimuat
 
   // Fungsi yang akan dijalankan saat form disubmit
   const handleSubmit = async (e) => {
     e.preventDefault(); // Mencegah reload halaman setelah form disubmit
     setError(""); // Reset pesan error sebelum proses
+    setpinjamen_id("");
+    setjumlah_bayar("");
+    settgl_bayar("");
+    setsisa_bayar("");
     setSuccess(""); // Reset pesan sukses sebelum proses
 
-    // Validasi input: jika namaProdi atau fakultasId kosong, set pesan error
-    if (namaProdi.trim() === "" || fakultasId.trim() === "") {
-      setError("Nama Prodi and Fakultas are required"); // Set pesan error jika input kosong
+    // Validasi input: jika namaPinjaman atau PinjamanId kosong, set pesan error
+    if (pinjamen_id.trim() === "") {
+      setError("pinjaman are required"); // Set pesan error jika input kosong
       return; // Stop eksekusi fungsi jika input tidak valid
     }
-    if (kaprodi.trim() === "") {
-      setError("Nama Kaprodi are required"); // Set pesan error jika input kosong
+    if (tgl_bayar.trim() === "") {
+      setError("Nama tgl_bayar are required"); // Set pesan error jika input kosong
       return; // Stop eksekusi fungsi jika input tidak valid
     }
-    if (singkatan.trim() === "") {
-      setError("Singkatan are required"); // Set pesan error jika input kosong
+    if (jumlah_bayar.trim() === "") {
+      setError("jumlah_bayar are required"); // Set pesan error jika input kosong
+      return; // Stop eksekusi fungsi jika input tidak valid
+    }
+    if (sisa_bayar.trim() === "") {
+      setError("sisa_bayar are required"); // Set pesan error jika input kosong
       return; // Stop eksekusi fungsi jika input tidak valid
     }
 
     try {
-      // Melakukan HTTP POST request untuk menyimpan data prodi
+      // Melakukan HTTP POST request untuk menyimpan data Pinjaman
       const response = await axios.post(
-        "https://academic-mi5a.vercel.app/api/api/prodi", // Endpoint API yang dituju
+        "https://pinjol-wuxxs-projects.vercel.app/api/api/pembayaran", // Endpoint API yang dituju
         {
-          nama: namaProdi, // Data nama prodi
-          kaprodi: kaprodi,
-          singkatan: singkatan,
-          fakultas_id: fakultasId, // Data ID fakultas yang dipilih
+          tgl_bayar: tgl_bayar, // Data nama Pinjaman
+          jumlah_bayar: jumlah_bayar,
+          sisa_bayar: sisa_bayar,
+          pinjamen_id: pinjamen_id, // Data ID Pinjaman yang dipilih
         }
       );
 
       // Jika response HTTP status 201 (Created), berarti berhasil
       if (response.status === 201) {
-        // Tampilkan pesan sukses jika prodi berhasil dibuat
-        setSuccess("Prodi created successfully!");
-        setNamaProdi(""); // Kosongkan input form setelah sukses submit
-        setKaprodi("");
-        setSingkatan("");
-        setFakultasId(""); // Kosongkan dropdown setelah sukses submit
+        // Tampilkan pesan sukses jika Pinjaman berhasil dibuat
+        setSuccess("Pinjaman created successfully!");
+        setsisa_bayar(""); // Kosongkan input form setelah sukses submit
+        settgl_bayar("");
+        setjumlah_bayar("");
+        setpinjamen_id(""); // Kosongkan dropdown setelah sukses submit
       } else {
         // Jika tidak berhasil, tampilkan pesan error
-        setError("Failed to create prodi");
+        setError("Failed to create pinjaman");
       }
     } catch (error) {
       // Jika terjadi error (misal masalah jaringan), tampilkan pesan error
-      setError("An error occurred while creating prodi");
+      setError("An error occurred while creating Pinjaman");
     }
   };
 
   return (
     <div className="container mt-5">
-      <h2 className="mb-4">Create Prodi</h2>
+      <h2 className="mb-4">Create Pinjaman</h2>
       {/* Jika ada pesan error, tampilkan dalam alert bootstrap */}
       {error && <div className="alert alert-danger">{error}</div>}
       {/* Jika ada pesan sukses, tampilkan dalam alert bootstrap */}
@@ -94,59 +102,61 @@ export default function CreateProdi() {
       <form onSubmit={handleSubmit}>
         {/* Tangani event submit dengan handleSubmit */}
         <div className="mb-3">
-          <label className="form-label">Nama Prodi</label>
-          {/* Input untuk nama prodi dengan class bootstrap */}
-          <input
-            type="text"
-            className="form-control"
-            id="namaProdi"
-            value={namaProdi} // Nilai input disimpan di state namaProdi
-            onChange={(e) => setNamaProdi(e.target.value)} // Update state saat input berubah
-            placeholder="Enter Prodi Name" // Placeholder teks untuk input
-          />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Nama Kaprodi</label>
-          {/* Input untuk nama prodi dengan class bootstrap */}
-          <input
-            type="text"
-            className="form-control"
-            id="kaprodi"
-            value={kaprodi} // Nilai input disimpan di state namaProdi
-            onChange={(e) => setKaprodi(e.target.value)} // Update state saat input berubah
-            placeholder="Enter Kaprodi Name" // Placeholder teks untuk input
-          />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Singkatan</label>
-          {/* Input untuk nama prodi dengan class bootstrap */}
-          <input
-            type="text"
-            className="form-control"
-            id="singkatan"
-            value={singkatan} // Nilai input disimpan di state namaProdi
-            onChange={(e) => setSingkatan(e.target.value)} // Update state saat input berubah
-            placeholder="Enter Singkatan" // Placeholder teks untuk input
-          />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Fakultas</label>
-          {/* Dropdown untuk memilih fakultas */}
+          <label className="form-label">Jumlah Pinjaman</label>
+          {/* Dropdown untuk memilih Pinjaman */}
           <select
             className="form-select"
-            id="fakultasId"
-            value={fakultasId} // Nilai dropdown disimpan di state fakultasId
-            onChange={(e) => setFakultasId(e.target.value)} // Update state saat pilihan berubah
+            id="pinjamen_id"
+            value={pinjamen_id} // Nilai dropdown disimpan di state PinjamanId
+            onChange={(e) => setpinjamen_id(e.target.value)} // Update state saat pilihan berubah
           >
-            <option value="">Select Fakultas</option>
-            {fakultasList.map((fakultas) => (
-              <option key={fakultas.id} value={fakultas.id}>
-                {/* Set key dan value untuk masing-masing fakultas */}
-                {fakultas.nama} {/* Nama fakultas sebagai teks di dropdown */}
+            <option value="">Select pinjaman</option>
+            {pinjamanList.map((pinjamen) => (
+              <option key={pinjamen.id} value={pinjamen.id}>
+                {/* Set key dan value untuk masing-masing Pinjaman */}
+                {pinjamen.jumlah_pinjam}{" "}
+                {/* Nama Pinjaman sebagai teks di dropdown */}
               </option>
             ))}
           </select>
         </div>
+        <div className="mb-3">
+          <label className="form-label">Tanggal Bayar</label>
+          {/* Input untuk nama Pinjaman dengan class bootstrap */}
+          <input
+            type="date"
+            className="form-control"
+            id="tgl_bayar"
+            value={tgl_bayar} // Nilai input disimpan di state namaPinjaman
+            onChange={(e) => settgl_bayar(e.target.value)} // Update state saat input berubah
+            placeholder="Enter Tanggal Pinjam" // Placeholder teks untuk input
+          />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Jumlah Bayar</label>
+          {/* Input untuk nama Pinjaman dengan class bootstrap */}
+          <input
+            type="text"
+            className="form-control"
+            id="jumlah_bayar"
+            value={jumlah_bayar} // Nilai input disimpan di state namaPinjaman
+            onChange={(e) => setjumlah_bayar(e.target.value)} // Update state saat input berubah
+            placeholder="Enter Jumlah Pinjam" // Placeholder teks untuk input
+          />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Sisa Bayar</label>
+          {/* Input untuk nama Pinjaman dengan class bootstrap */}
+          <input
+            type="text"
+            className="form-control"
+            id="sisa_bayar"
+            value={sisa_bayar} // Nilai input disimpan di state namaPinjaman
+            onChange={(e) => setsisa_bayar(e.target.value)} // Update state saat input berubah
+            placeholder="Enter Sisa Bayar" // Placeholder teks untuk input
+          />
+        </div>
+
         {/* Tombol submit dengan class bootstrap */}
         <button type="submit" className="btn btn-primary">
           Create

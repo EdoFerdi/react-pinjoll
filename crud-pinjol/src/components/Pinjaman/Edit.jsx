@@ -6,34 +6,34 @@ import axios from "axios"; // Mengimpor axios untuk melakukan request HTTP
 export default function Edit() {
   const { id } = useParams(); // Mengambil parameter "id" dari URL menggunakan useParams
   const navigate = useNavigate(); // Menggunakan useNavigate untuk navigasi setelah proses selesai
-  const [nama, setNama] = useState(""); // Menginisialisasi state 'nama' untuk menyimpan nama pinjaman
-  const [tanggal, settanggal] = useState("");
-  const [singkatan, setSingkatan] = useState("");
-  const [orang, setorang] = useState(""); // Menginisialisasi state 'orang' untuk menyimpan ID orang terpilih
-  const [listorang, setListorang] = useState([]); // Menginisialisasi state 'listorang' untuk menyimpan daftar orang dari API
+  const [tgl_pinjam, settanggal_pinjam] = useState(""); // Menginisialisasi state 'nama' untuk menyimpan nama prodi
+  const [jumlah_pinjam, setjumlah_pinjam] = useState(""); // Menginisialisasi state 'nama' untuk menyimpan nama prodi
+  const [jangka_waktu, setjangka_waktu] = useState(""); // Menginisialisasi state ' untuk menyimpan ID terpilih
+  const [orang_id, setOrangId] = useState("");
+  const [orangList, setOrangList] = useState([]);
   const [error, setError] = useState(null); // Menginisialisasi state 'error' untuk menyimpan pesan error jika ada
 
   // Mengambil data pinjaman berdasarkan id ketika komponen pertama kali dimuat
   useEffect(() => {
     // Mengambil data pinjaman berdasarkan ID
     axios
-      .get(`https://academic-mi5a.vercel.app/api/api/pinjaman/${id}`)
+      .get(`https://pinjol-wuxxs-projects.vercel.app/api/api/pinjaman/${id}`)
       .then((response) => {
-        setNama(response.data.result.nama); // Menyimpan nama pinjaman ke dalam state 'nama'
-        settanggal(response.data.result.tanggal);
-        setSingkatan(response.data.result.singkatan);
-        setorang(response.data.result.orang.id); // Menyimpan ID orang ke dalam state 'orang'
+        settanggal_pinjam(response.data.tgl_pinjam);
+        setjumlah_pinjam(response.data.jumlah_pinjam); // Menyimpan nama prodi ke dalam state 'nama'
+        setjangka_waktu(response.data.jangka_waktu); // Menyimpan ID ke dalam state '
+        setOrangId(response.data.orang_id);
       })
       .catch((error) => {
         console.error("Error fetching data:", error); // Menangani error jika request gagal
         setError("Data tidak ditemukan"); // Menampilkan pesan error jika data tidak ditemukan
       });
 
-    // Mengambil data orang untuk dropdown
+    // Mengambil data  untuk dropdown
     axios
-      .get("https://academic-mi5a.vercel.app/api/api/orang") // Request ke API orang
+      .get("https://pinjol-wuxxs-projects.vercel.app/api/api/orang") // Request ke API
       .then((response) => {
-        setListorang(response.data.data); // Menyimpan daftar orang ke dalam state 'listorang'
+        setOrangList(response.data.data); // Menyimpan daftar ke dalam state 'lis'
       })
       .catch((error) => {
         console.error("Error fetching orang data:", error); // Menangani error jika request gagal
@@ -41,33 +41,36 @@ export default function Edit() {
   }, [id]); // useEffect akan dijalankan ulang setiap kali 'id' berubah
 
   // Menghandle perubahan input saat pengguna mengetik di form
-  const handleChangeNama = (e) => {
-    setNama(e.target.value); // Mengubah state 'nama' sesuai dengan nilai input yang diisi pengguna
+  const handleChangetanggal_pinjam = (e) => {
+    settanggal_pinjam(e.target.value); // Mengubah state 'nama' sesuai dengan nilai input yang diisi pengguna
   };
-  const handleChangetanggal = (e) => {
-    settanggal(e.target.value); // Mengubah state 'nama' sesuai dengan nilai input yang diisi pengguna
-  };
-  const handleChangeSingkatan = (e) => {
-    setSingkatan(e.target.value); // Mengubah state 'nama' sesuai dengan nilai input yang diisi pengguna
+  const handleChangejumlah_pinjam = (e) => {
+    setjumlah_pinjam(e.target.value); // Mengubah state 'nama' sesuai dengan nilai input yang diisi pengguna
   };
 
-  // Menghandle perubahan dropdown orang
-  const handleorangChange = (e) => {
-    setorang(e.target.value); // Mengubah state 'orang' sesuai dengan pilihan yang dipilih pengguna di dropdown
+  const handleChangejangka_waktu = (e) => {
+    setjangka_waktu(e.target.value); // Mengubah state 'nama' sesuai dengan nilai input yang diisi pengguna
+  };
+  // Menghandle perubahan dropdown
+
+  // Menghandle perubahan dropdown
+  const handleChangeOrang = (e) => {
+    setOrangId(e.target.value); // Mengubah state ' sesuai dengan pilihan yang dipilih pengguna di dropdown
   };
 
   // Menghandle submit form untuk mengedit data pinjaman
   const handleSubmit = (e) => {
     e.preventDefault(); // Mencegah reload halaman saat form disubmit
     axios
-      .put(`https://academic-mi5a.vercel.app/api/api/pinjaman/${id}`, {
-        nama,
-        tanggal,
-        singkatan,
-        orang_id: orang,
-      }) // Mengirimkan request PATCH untuk mengupdate data pinjaman berdasarkan ID
+      .put(`https://pinjol-wuxxs-projects.vercel.app/api/api/pinjaman/${id}`, {
+        tgl_pinjam,
+        jumlah_pinjam,
+        jangka_waktu,
+        orang_id: orang_id,
+      }) // Mengirimkan request PATCH untuk mengupdate data prodi berdasarkan ID
       .then((response) => {
-        navigate("/pinjaman"); // Jika update berhasil, navigasi kembali ke halaman list pinjaman
+        
+        navigate("/pinjaman"); // Jika update berhasil, navigasi kembali ke halaman list prodi
       })
       .catch((error) => {
         console.error("Error updating data:", error); // Menampilkan error di console jika ada kesalahan
@@ -77,80 +80,81 @@ export default function Edit() {
 
   return (
     <div>
-      <h2>Edit Program Studi</h2> {/* Menampilkan judul halaman */}
+      <h2 className="mt-3 mb-3 ms-3">Edit pinjaman Klinik</h2>{" "}
+      {/* Menampilkan judul halaman */}
       {error && <p className="text-danger">{error}</p>}{" "}
       {/* Menampilkan pesan error jika ada */}
       <form onSubmit={handleSubmit}>
         {" "}
-        {/* Form untuk mengedit nama pinjaman */}
-        <div className="mb-3">
-          <label htmlFor="nama" className="form-label">
-            Nama Program Studi
+        {/* Form untuk mengedit nama prodi */}
+        <div className="mb-3 ms-3">
+          <label htmlFor="tanggal_pinjam" className="form-label">
+            Tanggal Pinjam
           </label>{" "}
-          {/* Label untuk input nama pinjaman */}
+          {/* Label untuk input nama prodi */}
           <input
-            type="text"
+            type="date"
             className="form-control"
-            id="nama"
-            value={nama} // Mengisi nilai input dengan state 'nama'
-            onChange={handleChangeNama} // Mengubah nilai input saat ada perubahan (user mengetik)
+            id="tgl_pinjam"
+            value={tgl_pinjam} // Mengisi nilai input dengan state 'nama'
+            onChange={handleChangetanggal_pinjam} // Mengubah nilai input saat ada perubahan (user mengetik)
             required // Input wajib diisi
           />
         </div>
-        <div className="mb-3">
-          <label htmlFor="nama" className="form-label">
-            Nama tanggal
+        <div className="mb-3 ms-3">
+          <label htmlFor="jumlah_pinjam" className="form-label">
+            Jumlah Pinjam
           </label>{" "}
-          {/* Label untuk input nama pinjaman */}
+          {/* Label untuk input nama prodi */}
           <input
             type="text"
             className="form-control"
-            id="tanggal"
-            value={tanggal} // Mengisi nilai input dengan state 'nama'
-            onChange={handleChangetanggal} // Mengubah nilai input saat ada perubahan (user mengetik)
+            id="jumlah_pinjam"
+            value={jumlah_pinjam} // Mengisi nilai input dengan state 'nama'
+            onChange={handleChangejumlah_pinjam} // Mengubah nilai input saat ada perubahan (user mengetik)
             required // Input wajib diisi
           />
         </div>
-        <div className="mb-3">
-          <label htmlFor="nama" className="form-label">
-            Singkatan
+        <div className="mb-3 ms-3">
+          <label htmlFor="jangka_waktu" className="form-label">
+            Tanggal Pinjam
           </label>{" "}
-          {/* Label untuk input nama pinjaman */}
+          {/* Label untuk input nama prodi */}
           <input
-            type="text"
+            type="date"
             className="form-control"
-            id="singkatan"
-            value={singkatan} // Mengisi nilai input dengan state 'nama'
-            onChange={handleChangeSingkatan} // Mengubah nilai input saat ada perubahan (user mengetik)
+            id="jangka_waktu"
+            value={jangka_waktu} // Mengisi nilai input dengan state 'nama'
+            onChange={handleChangejangka_waktu} // Mengubah nilai input saat ada perubahan (user mengetik)
             required // Input wajib diisi
           />
         </div>
-        <div className="mb-3">
-          <label htmlFor="orang" className="form-label">
-            Nama orang
+        <div className="mb-3 ms-3">
+          <label htmlFor="Orang" className="form-label">
+            Nama Orang
           </label>{" "}
-          {/* Label untuk dropdown orang */}
+          {/* Label untuk dropdown Orang */}
           <select
             className="form-select"
-            id="orang"
-            value={orang} // Mengisi nilai dropdown dengan state 'orang'
-            onChange={handleorangChange} // Mengubah nilai dropdown saat pengguna memilih orang
+            id="orang_id"
+            value={orang_id} // Mengisi nilai dropdown dengan state 'orang'
+            onChange={handleChangeOrang} // Mengubah nilai dropdown saat pengguna memilih orang
             required // Dropdown wajib dipilih
           >
-            <option value="">Pilih orang</option>{" "}
+            <option value="">Pilih Orang</option>{" "}
             {/* Default option untuk dropdown */}
-            {listorang.map(
+            {orangList.map(
               // Melakukan mapping dari daftar orang untuk menampilkan setiap orang sebagai opsi
-              (orang) => (
-                <option key={orang.id} value={orang.id}>
-                  {orang.nama} {/* Menampilkan nama orang */}
+              (f) => (
+                <option key={f.id} value={f.id}>
+                  {f.nama} {/* Menampilkan nama orang */}
                 </option>
               )
             )}
           </select>
         </div>
-        <button type="submit" className="btn btn-primary">
-          Save
+        <button type="submit" className="btn btn-secondary ms-3">
+          Simpan
         </button>{" "}
         {/* Tombol untuk submit form */}
       </form>

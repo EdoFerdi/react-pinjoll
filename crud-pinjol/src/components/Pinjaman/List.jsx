@@ -7,17 +7,17 @@ export default function List() {
   const [pinjaman, setPinjaman] = useState([]);
   useEffect(() => {
     axios
-      .get("https://academic-mi5a.vercel.app/api/api/pinjaman")
+      .get("https://pinjol-wuxxs-projects.vercel.app/api/api/pinjaman")
       .then((response) => {
         console.log(response);
         setPinjaman(response.data.data);
       });
   }, []);
 
-  const handleDelete = (id, nama) => {
+  const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
-      text: `You won't be able to revert this! pinjaman: ${nama}`,
+      text: `You won't be able to revert this! pinjaman`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -27,7 +27,9 @@ export default function List() {
       if (result.isConfirmed) {
         // Lakukan penghapusan jika dikonfirmasi
         axios
-          .delete(`https://academic-mi5a.vercel.app/api/api/pinjaman/${id}`)
+          .delete(
+            `https://pinjol-wuxxs-projects.vercel.app/api/api/pinjaman/${id}`
+          )
           .then((response) => {
             // Hapus fakultas dari state setelah sukses dihapus dari server
             setPinjaman(pinjaman.filter((f) => f.id !== id));
@@ -55,20 +57,20 @@ export default function List() {
       <table className="table">
         <thead>
           <tr>
-            <th>Nama pinjaman</th>
-            <th>Kapinjaman</th>
-            <th>Singkatan</th>
-            <th>Fakultas</th>
+            <th>Nama</th>
+            <th>Tanggal Pinjam</th>
+            <th>Jumlah Pinjam</th>
+            <th>Jangka Waktu</th>
             <th>#</th>
           </tr>
         </thead>
         <tbody>
           {pinjaman.map((data) => (
             <tr key={data.id}>
-              <td>{data.nama}</td>
-              <td>{data.kapinjaman}</td>
-              <td>{data.singkatan}</td>
-              <td>{data.fakultas.nama}</td>
+              <td>{data.orang.nama}</td>
+              <td>{data.tgl_pinjam}</td>
+              <td>{data.jumlah_pinjam}</td>
+              <td>{data.jangka_waktu}</td>
               <td>
                 <NavLink
                   to={`/pinjaman/edit/${data.id}`}
