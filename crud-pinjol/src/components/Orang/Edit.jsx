@@ -6,166 +6,131 @@ import axios from "axios"; // Mengimpor axios untuk melakukan request HTTP
 export default function Edit() {
   const { id } = useParams(); // Mengambil parameter "id" dari URL menggunakan useParams
   const navigate = useNavigate(); // Menggunakan useNavigate untuk navigasi setelah proses selesai
-  const [nik, setNik] = useState(""); // Menginisialisasi state 'nama' untuk menyimpan nama prodi
-  const [nama, setNama] = useState(""); // Menginisialisasi state 'nama' untuk menyimpan nama prodi
-  const [email, setEmail] = useState(""); // Menginisialisasi state 'nama' untuk menyimpan nama prodi
-  const [nohp, setNoHp] = useState(""); // Menginisialisasi state 'nama' untuk menyimpan nama prodi
-  const [alamat, setAlamat] = useState("");
+  const [nik, setNik] = useState(""); // Menginisialisasi state 'nik' untuk menyimpan NIK
+  const [nama, setNama] = useState(""); // Menginisialisasi state 'nama' untuk menyimpan nama
+  const [email, setEmail] = useState(""); // Menginisialisasi state 'email' untuk menyimpan email
+  const [nohp, setNoHp] = useState(""); // Menginisialisasi state 'nohp' untuk menyimpan nomor HP
+  const [alamat, setAlamat] = useState(""); // Menginisialisasi state 'alamat' untuk menyimpan alamat
   const [error, setError] = useState(null); // Menginisialisasi state 'error' untuk menyimpan pesan error jika ada
 
-  // Mengambil data prodi berdasarkan id ketika komponen pertama kali dimuat
+  // Mengambil data mahasiswa berdasarkan id ketika komponen pertama kali dimuat
   useEffect(() => {
-    // Mengambil data mahasiswa berdasarkan ID
     axios
-      .get(`https://academic-mi5a.vercel.app/api/api/mahasiswa/${id}`)
+      .get(`https://pinjol-wuxxs-projects.vercel.app/api/api/orang/${id}`)
       .then((response) => {
-        setNik("");
-        setNama(""); // Kosongkan input form setelah sukses submit
-        setTanggal_Lahir("");
-        setTempat_Lahir("");
-        setEmail("");
-        setNoHp("");
-        setAlamat("");
+        const { nik, nama, email, nohp, alamat } = response.data;
+        setNik(nik);
+        setNama(nama);
+        setEmail(email);
+        setNoHp(nohp);
+        setAlamat(alamat);
       })
       .catch((error) => {
         console.error("Error fetching data:", error); // Menangani error jika request gagal
         setError("Data tidak ditemukan"); // Menampilkan pesan error jika data tidak ditemukan
       });
-
-    // Mengambil data prodi untuk dropdown
-    axios
-      .get("https://academic-mi5a.vercel.app/api/api/prodi") // Request ke API fakultas
-      .then((response) => {
-        setProdiList(response.data.data); // Menyimpan daftar fakultas ke dalam state 'listFakultas'
-      })
-      .catch((error) => {
-        console.error("Error fetching fakultas data:", error); // Menangani error jika request gagal
-      });
-  }, [id]); // useEffect akan dijalankan ulang setiap kali 'id' berubah
+  }, [id]); // Dependency array untuk memastikan useEffect hanya dijalankan saat 'id' berubah
 
   // Menghandle perubahan input saat pengguna mengetik di form
-  const handleChangenik = (e) => {
-    setNik(e.target.value); // Mengubah state 'nama' sesuai dengan nilai input yang diisi pengguna
-  };
+  const handleChangenik = (e) => setNik(e.target.value);
+  const handleChangeNama = (e) => setNama(e.target.value);
+  const handleChangeEmail = (e) => setEmail(e.target.value);
+  const handleChangenoHp = (e) => setNoHp(e.target.value);
+  const handleChangeAlamat = (e) => setAlamat(e.target.value);
 
-  const handleChangeNama = (e) => {
-    setNama(e.target.value); // Mengubah state 'nama' sesuai dengan nilai input yang diisi pengguna
-  };
-  const handleChangeEmail = (e) => {
-    setEmail(e.target.value); // Mengubah state 'nama' sesuai dengan nilai input yang diisi pengguna
-  };
-
-  const handleChangenoHp = (e) => {
-    setNoHp(e.target.value); // Mengubah state 'nama' sesuai dengan nilai input yang diisi pengguna
-  };
-
-  // Menghandle perubahan dropdown fakultas
-  const handleChangeAlamat = (e) => {
-    setAlamat(e.target.value); // Mengubah state 'fakultas' sesuai dengan pilihan yang dipilih pengguna di dropdown
-  };
-
-  // Menghandle submit form untuk mengedit data prodi
+  // Menghandle submit form untuk mengedit data
   const handleSubmit = (e) => {
     e.preventDefault(); // Mencegah reload halaman saat form disubmit
     axios
-      .put(`https://academic-mi5a.vercel.app/api/api/mahasiswa/${id}`, {
+      .put(`https://pinjol-wuxxs-projects.vercel.app/api/api/orang/${id}`, {
         nik,
         nama,
         email,
         nohp,
         alamat,
-      }) // Mengirimkan request PATCH untuk mengupdate data prodi berdasarkan ID
-      .then((response) => {
-        navigate("/prodi"); // Jika update berhasil, navigasi kembali ke halaman list prodi
+      })
+      .then(() => {
+        navigate("/orang"); // Jika update berhasil, navigasi kembali ke halaman list prodi
       })
       .catch((error) => {
         console.error("Error updating data:", error); // Menampilkan error di console jika ada kesalahan
-        setError("Gagal mengupdate data"); // Mengubah state 'error' jika terjadi kesalahan dalam proses update
+        setError("Gagal mengupdate data"); // Menampilkan pesan error
       });
   };
 
   return (
     <div>
-      <h2>Edit Mahasiswa</h2> {/* Menampilkan judul halaman */}
-      {error && <p className="text-danger">{error}</p>}{" "}
-      {/* Menampilkan pesan error jika ada */}
+      <h2>Edit Mahasiswa</h2>
+      {error && <p className="text-danger">{error}</p>}
       <form onSubmit={handleSubmit}>
-        {" "}
-        {/* Form untuk mengedit nama prodi */}
         <div className="mb-3">
-          <label htmlFor="nama" className="form-label">
+          <label htmlFor="nik" className="form-label">
             NIK
-          </label>{" "}
-          {/* Label untuk input nama prodi */}
+          </label>
           <input
             type="text"
             className="form-control"
             id="nik"
-            value={nik} // Mengisi nilai input dengan state 'nama'
-            onChange={handleChangenik} // Mengubah nilai input saat ada perubahan (user mengetik)
-            required // Input wajib diisi
+            value={nik}
+            onChange={handleChangenik}
+            required
           />
         </div>
         <div className="mb-3">
           <label htmlFor="nama" className="form-label">
             Nama
-          </label>{" "}
-          {/* Label untuk input nama prodi */}
+          </label>
           <input
             type="text"
             className="form-control"
             id="nama"
-            value={nama} // Mengisi nilai input dengan state 'nama'
-            onChange={handleChangeNama} // Mengubah nilai input saat ada perubahan (user mengetik)
-            required // Input wajib diisi
+            value={nama}
+            onChange={handleChangeNama}
+            required
           />
         </div>
         <div className="mb-3">
           <label htmlFor="email" className="form-label">
             Email
-          </label>{" "}
-          {/* Label untuk input nama prodi */}
+          </label>
           <input
-            type="text"
+            type="email"
             className="form-control"
             id="email"
-            value={email} // Mengisi nilai input dengan state 'nama'
-            onChange={handleChangeEmail} // Mengubah nilai input saat ada perubahan (user mengetik)
-            required // Input wajib diisi
+            value={email}
+            onChange={handleChangeEmail}
+            required
           />
         </div>
         <div className="mb-3">
           <label htmlFor="nohp" className="form-label">
-            No Hp
-          </label>{" "}
-          {/* Label untuk input nama prodi */}
+            No HP
+          </label>
           <input
             type="text"
             className="form-control"
             id="nohp"
-            value={nohp} // Mengisi nilai input dengan state 'nama'
-            onChange={handleChangenoHp} // Mengubah nilai input saat ada perubahan (user mengetik)
-            required // Input wajib diisi
+            value={nohp}
+            onChange={handleChangenoHp}
+            required
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="nohp" className="form-label">
+          <label htmlFor="alamat" className="form-label">
             Alamat
-          </label>{" "}
-          {/* Label untuk input nama prodi */}
+          </label>
           <input
             type="text"
             className="form-control"
             id="alamat"
-            value={alamat} // Mengisi nilai input dengan state 'nama'
-            onChange={handleChangeAlamat} // Mengubah nilai input saat ada perubahan (user mengetik)
-            required // Input wajib diisi
+            value={alamat}
+            onChange={handleChangeAlamat}
+            required
           />
         </div>
         <button type="submit" className="btn btn-primary">
           Save
-        </button>{" "}
-        {/* Tombol untuk submit form */}
+        </button>
       </form>
     </div>
   );

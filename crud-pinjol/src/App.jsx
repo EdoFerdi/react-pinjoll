@@ -7,9 +7,9 @@ import {
 } from "react-router-dom";
 
 //import ProtectedRoute from "./components/ProtectedRoute"; // ProtectedRoute Component
-import Logout from "./components/Logout";
+//import Logout from "./components/Logout";
 
-const Home = React.lazy(() => import("./components/Home"));
+//const Home = React.lazy(() => import("./components/Home"));
 const OrangList = React.lazy(() => import("./components/Orang/List"));
 const OrangCreate = React.lazy(() => import("./components/Orang/Create"));
 const OrangEdit = React.lazy(() => import("./components/Orang/Edit"));
@@ -20,7 +20,7 @@ const PembayaranList = React.lazy(() => import("./components/Pembayaran/List"));
 const PembayaranCreate = React.lazy(() => import("./components/Pembayaran/Create"));
 const PembayaranEdit = React.lazy(() => import("./components/Pembayaran/Edit"));
 
-const Login = React.lazy(() => import("./components/Login"));
+//const Login = React.lazy(() => import("./components/Login"));
 const App = () => {
   const [token, setToken] = useState(localStorage.getItem("authToken")); // Ambil token dari localStorage
 
@@ -80,9 +80,9 @@ const App = () => {
         </div>
       </nav>
       <Routes>
-        <Route path="/login" element={<Login setToken={setToken} />} />
+        {/* <Route path="/login" element={<Login setToken={setToken} />} />
         <Route path="/logout" element={<Logout />} />
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home />} /> */}
         <Route path="/orang" element={<OrangList />} />
         <Route path="/orang/create" element={<OrangCreate />} />
         <Route path="/orang/edit/:id" element={<OrangEdit />} />

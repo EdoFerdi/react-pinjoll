@@ -48,7 +48,7 @@ export default function CreateOrang() {
     try {
       // Melakukan HTTP POST request untuk menyimpan data Orang
       const response = await axios.post(
-        "https://academic-mi5a.vercel.app/api/api/Orang", // Endpoint API yang dituju
+        "https://pinjol-wuxxs-projects.vercel.app/api/api/orang", // Endpoint API yang dituju
         {
           nik: nik, // Data yang dikirim berupa objek JSON dengan properti 'nama'
           nama: nama,
@@ -119,7 +119,7 @@ export default function CreateOrang() {
             className="form-control"
             id="email"
             value={email} // Nilai input disimpan di state nik
-            onChange={(e) => setNama(e.target.value)} // Update state saat input berubah
+            onChange={(e) => setEmail(e.target.value)} // Update state saat input berubah
             placeholder="Enter Email" // Placeholder teks untuk input
           />
         </div>

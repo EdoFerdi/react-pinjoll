@@ -8,7 +8,7 @@ export default function List() {
 
   useEffect(() => {
     axios
-      .get("https://academic-mi5a.vercel.app/api/api/orang")
+      .get("https://pinjol-wuxxs-projects.vercel.app/api/api/orang")
       .then((response) => {
         console.log(response);
         setOrang(response.data.data);
@@ -28,7 +28,7 @@ export default function List() {
       if (result.isConfirmed) {
         // Lakukan penghapusan jika dikonfirmasi
         axios
-          .delete(`https://academic-mi5a.vercel.app/api/api/orang/${id}`)
+          .delete(`https://pinjol-wuxxs-projects.vercel.app/api/api/orang${id}`)
           .then((response) => {
             // Hapus orang dari state setelah sukses dihapus dari server
             setOrang(orang.filter((f) => f.id !== id));
