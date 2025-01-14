@@ -19,7 +19,7 @@ export default function Edit() {
     axios
       .get(`https://pinjol-wuxxs-projects.vercel.app/api/api/pembayaran/${id}`)
       .then((response) => {
-        setjumlah_pinjam(response.data.jumlah_pinjam); // Menyimpan nama jumlah_pinjam ke dalam state 'nama'
+        setjumlah_pinjam(response.data.pinjaman_id); // Menyimpan nama jumlah_pinjam ke dalam state 'nama'
         settgl_bayar(response.data.tgl_bayar);
         setjumlah_bayar(response.data.jumlah_bayar);
         setsisa_bayar(response.data.sisa_bayar);
