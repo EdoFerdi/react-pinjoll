@@ -5,7 +5,7 @@ import axios from "axios"; // Import axios untuk melakukan HTTP request
 
 export default function CreatePinjaman() {
   // Inisialisasi state untuk menyimpan nama Pinjaman
-  const [pinjamen_id, setpinjamen_id] = useState("");
+  const [pinjaman_id, setpinjamanid] = useState("");
   // Inisialisasi state untuk menyimpan ID Pinjaman yang dipilih
   const [tgl_bayar, settgl_bayar] = useState("");
   const [jumlah_bayar, setjumlah_bayar] = useState("");
@@ -37,14 +37,14 @@ export default function CreatePinjaman() {
   const handleSubmit = async (e) => {
     e.preventDefault(); // Mencegah reload halaman setelah form disubmit
     setError(""); // Reset pesan error sebelum proses
-    setpinjamen_id("");
+    setpinjamanid("");
     setjumlah_bayar("");
     settgl_bayar("");
     setsisa_bayar("");
     setSuccess(""); // Reset pesan sukses sebelum proses
 
     // Validasi input: jika namaPinjaman atau PinjamanId kosong, set pesan error
-    if (pinjamen_id.trim() === "") {
+    if (pinjaman_id.trim() === "") {
       setError("pinjaman are required"); // Set pesan error jika input kosong
       return; // Stop eksekusi fungsi jika input tidak valid
     }
@@ -66,10 +66,11 @@ export default function CreatePinjaman() {
       const response = await axios.post(
         "https://pinjol-wuxxs-projects.vercel.app/api/api/pembayaran", // Endpoint API yang dituju
         {
+          pinjaman_id: pinjaman_id,
           tgl_bayar: tgl_bayar, // Data nama Pinjaman
           jumlah_bayar: jumlah_bayar,
           sisa_bayar: sisa_bayar,
-          pinjamen_id: pinjamen_id, // Data ID Pinjaman yang dipilih
+          // Data ID Pinjaman yang dipilih
         }
       );
 
@@ -80,7 +81,7 @@ export default function CreatePinjaman() {
         setsisa_bayar(""); // Kosongkan input form setelah sukses submit
         settgl_bayar("");
         setjumlah_bayar("");
-        setpinjamen_id(""); // Kosongkan dropdown setelah sukses submit
+        setpinjamanid(""); // Kosongkan dropdown setelah sukses submit
       } else {
         // Jika tidak berhasil, tampilkan pesan error
         setError("Failed to create pinjaman");
@@ -106,9 +107,9 @@ export default function CreatePinjaman() {
           {/* Dropdown untuk memilih Pinjaman */}
           <select
             className="form-select"
-            id="pinjamen_id"
-            value={pinjamen_id} // Nilai dropdown disimpan di state PinjamanId
-            onChange={(e) => setpinjamen_id(e.target.value)} // Update state saat pilihan berubah
+            id="pinjaman_id"
+            value={pinjaman_id} // Nilai dropdown disimpan di state PinjamanId
+            onChange={(e) => setpinjamanid(e.target.value)} // Update state saat pilihan berubah
           >
             <option value="">Select pinjaman</option>
             {pinjamanList.map((pinjamen) => (

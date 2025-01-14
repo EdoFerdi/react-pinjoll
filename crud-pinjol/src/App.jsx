@@ -5,11 +5,11 @@ import {
   Routes,
   NavLink,
 } from "react-router-dom";
+import Loader from "./components/Loader"; // Loader Component
+import ProtectedRoute from "./components/ProtectedRoute"; // ProtectedRoute Component
+import Logout from "./components/Logout";
 
-//import ProtectedRoute from "./components/ProtectedRoute"; // ProtectedRoute Component
-//import Logout from "./components/Logout";
-
-//const Home = React.lazy(() => import("./components/Home"));
+const Home = React.lazy(() => import("./components/Home"));
 const OrangList = React.lazy(() => import("./components/Orang/List"));
 const OrangCreate = React.lazy(() => import("./components/Orang/Create"));
 const OrangEdit = React.lazy(() => import("./components/Orang/Edit"));
@@ -19,17 +19,17 @@ const PinjamanEdit = React.lazy(() => import("./components/Pinjaman/Edit"));
 const PembayaranList = React.lazy(() => import("./components/Pembayaran/List"));
 const PembayaranCreate = React.lazy(() => import("./components/Pembayaran/Create"));
 const PembayaranEdit = React.lazy(() => import("./components/Pembayaran/Edit"));
+const Login = React.lazy(() => import("./components/Login"));
 
-//const Login = React.lazy(() => import("./components/Login"));
 const App = () => {
   const [token, setToken] = useState(localStorage.getItem("authToken")); // Ambil token dari localStorage
 
   return (
     <Router>
-      <nav className="navbar navbar-expand-lg bg-body-tertiary">
+      <nav className="navbar navbar-expand-lg navbar-dark bg-">
         <div className="container-fluid">
-          <a className="navbar-brand" href="#">
-            Navbar
+          <a className="navbar-brand text-white" href="#">
+            <h2>Pinjol</h2>
           </a>
           <button
             className="navbar-toggler"
@@ -42,10 +42,22 @@ const App = () => {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
+
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              <li>
+                {token ? ( // Tampilkan Logout jika token ada
+                  <NavLink className="nav-link" to="/logout">
+                    Logout
+                  </NavLink>
+                ) : (
+                  <NavLink className="nav-link" to="/login">
+                    Login
+                  </NavLink>
+                )}
+              </li>
               <li className="nav-item">
-                <NavLink to="/" className="nav-link">
+                <NavLink to="/home" className="nav-link">
                   Home
                 </NavLink>
               </li>
@@ -64,37 +76,103 @@ const App = () => {
                   Pembayaran
                 </NavLink>
               </li>
-              <li>
-                {token ? ( // Tampilkan Logout jika token ada
-                  <NavLink className="nav-link" to="/logout">
-                    Logout
-                  </NavLink>
-                ) : (
-                  <NavLink className="nav-link" to="/login">
-                    Login
-                  </NavLink>
-                )}
-              </li>
             </ul>
           </div>
         </div>
       </nav>
-      <Routes>
-        {/* <Route path="/login" element={<Login setToken={setToken} />} />
-        <Route path="/logout" element={<Logout />} />
-        <Route path="/" element={<Home />} /> */}
-        <Route path="/orang" element={<OrangList />} />
-        <Route path="/orang/create" element={<OrangCreate />} />
-        <Route path="/orang/edit/:id" element={<OrangEdit />} />
-        <Route path="/pinjaman" element={<PinjamanList />} />
-        <Route path="/pinjaman/create" element={<PinjamanCreate />} />
-        <Route path="/pinjaman/edit/:id" element={<PinjamanEdit />} />
-        <Route path="/pembayaran" element={<PembayaranList />} />
-        <Route path="/pembayaran/create" element={<PembayaranCreate />} />
-        <Route path="/pembayaran/edit/:id" element={<PembayaranEdit />} />
-      </Routes>
+
+      <div className="container">
+        <Suspense fallback={<Loader />}>
+          {/* Suspense untuk fallback saat loading */}
+          <Routes>
+            <Route
+              path="/home"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />{" "}
+            {/* Route ke halaman Home */}
+            <Route path="/login" element={<Login setToken={setToken} />} />
+            <Route path="/logout" element={<Logout />} />
+            <Route
+              path="/orang"
+              element={
+                <ProtectedRoute>
+                  <OrangList />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/orang/create"
+              element={
+                <ProtectedRoute>
+                  <OrangCreate />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/orang/edit/:id"
+              element={
+                <ProtectedRoute>
+                  {" "}
+                  <OrangEdit />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/pinjaman"
+              element={
+                <ProtectedRoute>
+                  <PinjamanList />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/pinjaman/create"
+              element={
+                <ProtectedRoute>
+                  <PinjamanCreate />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/pinjaman/edit/:id"
+              element={
+                <ProtectedRoute>
+                  <PinjamanEdit />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/pembayaran"
+              element={
+                <ProtectedRoute>
+                  <PembayaranList />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/pembayaran/create"
+              element={
+                <ProtectedRoute>
+                  <PembayaranCreate />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/pembayaran/edit/:id"
+              element={
+                <ProtectedRoute>
+                  <PembayaranEdit />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </Suspense>
+      </div>
     </Router>
   );
 };
-
 export default App;

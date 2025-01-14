@@ -28,7 +28,7 @@ export default function List() {
         // Lakukan penghapusan jika dikonfirmasi
         axios
           .delete(
-            `https://pinjol-wuxxs-projects.vercel.app/api/api/pembayaran${id}`
+            `https://pinjol-wuxxs-projects.vercel.app/api/api/pembayaran/${id}`
           )
           .then((response) => {
             // Hapus fakultas dari state setelah sukses dihapus dari server

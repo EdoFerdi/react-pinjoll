@@ -6,20 +6,20 @@ import axios from "axios"; // Mengimpor axios untuk melakukan request HTTP
 export default function Edit() {
   const { id } = useParams(); // Mengambil parameter "id" dari URL menggunakan useParams
   const navigate = useNavigate(); // Menggunakan useNavigate untuk navigasi setelah proses selesai
-  const [jumlah_pinjam, setjumlah_pinjam] = useState(""); // Menginisialisasi state 'nama' untuk menyimpan nama jumlah_pinjam
+  const [pinjaman_id, setpinjaman_id] = useState(""); // Menginisialisasi state 'nama' untuk menyimpan nama pinjaman_id
   const [tgl_bayar, settgl_bayar] = useState("");
   const [jumlah_bayar, setjumlah_bayar] = useState("");
   const [sisa_bayar, setsisa_bayar] = useState(""); // Menginisialisasi state 'orang' untuk menyimpan ID orang terpilih
-  const [listjumlah_pinjam, setlistjumlah_pinjam] = useState([]); // Menginisialisasi state 'listjumlah_pinjam' untuk menyimpan daftar orang dari API
+  const [listpinjaman_id, setlistpinjaman_id] = useState([]); // Menginisialisasi state 'listpinjaman_id' untuk menyimpan daftar orang dari API
   const [error, setError] = useState(null); // Menginisialisasi state 'error' untuk menyimpan pesan error jika ada
 
-  // Mengambil data jumlah_pinjam berdasarkan id ketika komponen pertama kali dimuat
+  // Mengambil data pinjaman_id berdasarkan id ketika komponen pertama kali dimuat
   useEffect(() => {
-    // Mengambil data jumlah_pinjam berdasarkan ID
+    // Mengambil data pinjaman_id berdasarkan ID
     axios
       .get(`https://pinjol-wuxxs-projects.vercel.app/api/api/pembayaran/${id}`)
       .then((response) => {
-        setjumlah_pinjam(response.data.pinjaman_id); // Menyimpan nama jumlah_pinjam ke dalam state 'nama'
+        setpinjaman_id(response.data.pinjaman_id); // Menyimpan nama pinjaman_id ke dalam state 'nama'
         settgl_bayar(response.data.tgl_bayar);
         setjumlah_bayar(response.data.jumlah_bayar);
         setsisa_bayar(response.data.sisa_bayar);
@@ -33,7 +33,7 @@ export default function Edit() {
     axios
       .get("https://pinjol-wuxxs-projects.vercel.app/api/api/pinjaman") // Request ke API orang
       .then((response) => {
-        setlistjumlah_pinjam(response.data.data); // Menyimpan daftar orang ke dalam state 'listjumlah_pinjam'
+        setlistpinjaman_id(response.data.data); // Menyimpan daftar orang ke dalam state 'listpinjaman_id'
       })
       .catch((error) => {
         console.error("Error fetching orang data:", error); // Menangani error jika request gagal
@@ -41,14 +41,14 @@ export default function Edit() {
   }, [id]); // useEffect akan dijalankan ulang setiap kali 'id' berubah
 
   // Menghandle perubahan input saat pengguna mengetik di form
-  const handleChangejumlah_pinjam = (e) => {
-    setjumlah_pinjam(e.target.value); // Mengubah state 'jumlah_pinjam' sesuai dengan nilai input yang diisi pengguna
+  const handleChangepinjaman_id = (e) => {
+    setpinjaman_id(e.target.value); // Mengubah state 'pinjaman_id' sesuai dengan nilai input yang diisi pengguna
   };
   const handleChangetgl_bayar = (e) => {
-    settgl_bayar(e.target.value); // Mengubah state 'jumlah_pinjam' sesuai dengan nilai input yang diisi pengguna
+    settgl_bayar(e.target.value); // Mengubah state 'pinjaman_id' sesuai dengan nilai input yang diisi pengguna
   };
   const handleChangejumlah_bayar = (e) => {
-    setjumlah_bayar(e.target.value); // Mengubah state 'jumlah_pinjam' sesuai dengan nilai input yang diisi pengguna
+    setjumlah_bayar(e.target.value); // Mengubah state 'pinjaman_id' sesuai dengan nilai input yang diisi pengguna
   };
 
   // Menghandle perubahan dropdown orang
@@ -56,21 +56,21 @@ export default function Edit() {
     setsisa_bayar(e.target.value); // Mengubah state 'orang' sesuai dengan pilihan yang dipilih pengguna di dropdown
   };
 
-  // Menghandle submit form untuk mengedit data jumlah_pinjam
+  // Menghandle submit form untuk mengedit data pinjaman_id
   const handleSubmit = (e) => {
     e.preventDefault(); // Mencegah reload halaman saat form disubmit
     axios
       .put(
         `https://pinjol-wuxxs-projects.vercel.app/api/api/pembayaran/${id}`,
         {
-          jumlah_pinjam: jumlah_pinjam,
+          pinjaman_id: pinjaman_id,
           tgl_bayar,
           jumlah_bayar,
           sisa_bayar,
         }
-      ) // Mengirimkan request PATCH untuk mengupdate data jumlah_pinjam berdasarkan ID
+      ) // Mengirimkan request PATCH untuk mengupdate data pinjaman_id berdasarkan ID
       .then((response) => {
-        navigate("/jumlah_pinjam"); // Jika update berhasil, navigasi kembali ke halaman list jumlah_pinjam
+        navigate("/pembayaran"); // Jika update berhasil, navigasi kembali ke halaman list pinjaman_id
       })
       .catch((error) => {
         console.error("Error updating data:", error); // Menampilkan error di console jika ada kesalahan
@@ -85,26 +85,26 @@ export default function Edit() {
       {/* Menampilkan pesan error jika ada */}
       <form onSubmit={handleSubmit}>
         {" "}
-        {/* Form untuk mengedit jumlah_pinjam jumlah_pinjam */}
+        {/* Form untuk mengedit pinjaman_id pinjaman_id */}
         <div className="mb-3">
-          <label htmlFor="jumlah_pinjam" className="form-label">
-            jumlah_pinjam
+          <label htmlFor="pinjaman_id" className="form-label">
+            Pinjaman
           </label>{" "}
           {/* Label untuk dropdown orang */}
           <select
             className="form-select"
-            id="jumlah_pinjam"
-            value={jumlah_pinjam} // Mengisi nilai dropdown dengan state 'orang'
-            onChange={handleChangejumlah_pinjam} // Mengubah nilai dropdown saat pengguna memilih orang
+            id="pinjaman_id"
+            value={pinjaman_id} // Mengisi nilai dropdown dengan state 'orang'
+            onChange={handleChangepinjaman_id} // Mengubah nilai dropdown saat pengguna memilih orang
             required // Dropdown wajib dipilih
           >
-            <option value="">Pilih jumlah_pinjam</option>{" "}
+            <option value="">Pilih pinjaman_id</option>{" "}
             {/* Default option untuk dropdown */}
-            {listjumlah_pinjam.map(
-              // Melakukan mapping dari daftar jumlah_pinjam untuk menampilkan setiap orang sebagai opsi
-              (jumlah_pinjam) => (
-                <option key={jumlah_pinjam.id} value={jumlah_pinjam.id}>
-                  {jumlah_pinjam.jumlah_pinjam} {/* Menampilkan nama jumlah_pinjam */}
+            {listpinjaman_id.map(
+              // Melakukan mapping dari daftar pinjaman_id untuk menampilkan setiap orang sebagai opsi
+              (pinjaman_id) => (
+                <option key={pinjaman_id.id} value={pinjaman_id.id}>
+                  {pinjaman_id.jumlah_pinjam} {/* Menampilkan nama pinjaman_id */}
                 </option>
               )
             )}
@@ -114,12 +114,12 @@ export default function Edit() {
           <label htmlFor="tgl_bayar" className="form-label">
             Tanggal bayar
           </label>{" "}
-          {/* Label untuk input jumlah_pinjam jumlah_pinjam */}
+          {/* Label untuk input pinjaman_id pinjaman_id */}
           <input
             type="date"
             className="form-control"
             id="tgl_bayar"
-            value={tgl_bayar} // Mengisi nilai input dengan state 'jumlah_pinjam'
+            value={tgl_bayar} // Mengisi nilai input dengan state 'pinjaman_id'
             onChange={handleChangetgl_bayar} // Mengubah nilai input saat ada perubahan (user mengetik)
             required // Input wajib diisi
           />
@@ -128,7 +128,7 @@ export default function Edit() {
           <label htmlFor="jumlah_bayar" className="form-label">
             Jumlah Bayar
           </label>{" "}
-          {/* Label untuk input nama jumlah_pinjam */}
+          {/* Label untuk input nama pinjaman_id */}
           <input
             type="text"
             className="form-control"
@@ -142,7 +142,7 @@ export default function Edit() {
           <label htmlFor="nama" className="form-label">
             Sisa Bayar
           </label>{" "}
-          {/* Label untuk input nama jumlah_pinjam */}
+          {/* Label untuk input nama pinjaman_id */}
           <input
             type="text"
             className="form-control"
