@@ -26,7 +26,7 @@ const App = () => {
 
   return (
     <Router>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-">
+      <nav className="navbar navbar-expand-lg navbar-dark bg-info">
         <div className="container-fluid">
           <a className="navbar-brand text-white" href="#">
             <h2>Pinjol</h2>

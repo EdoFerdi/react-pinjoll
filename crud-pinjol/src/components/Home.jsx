@@ -1,8 +1,10 @@
 export default function Home() {
   return (
     <>
-      <h2>Selamat Datang di APlikasi Pinjam Uang Kami</h2>
-      <h3>Pinjaman Tanpa Bunga Tambahan</h3>
+      <div className="mb-4">
+      <h2 className="text-center">Selamat Datang di Aplikasi Pinjam Uang Kami</h2>
+      <h3 className="text-center">Pinjaman Tanpa Bunga Tambahan</h3>
+      </div>
     </>
   );
 }

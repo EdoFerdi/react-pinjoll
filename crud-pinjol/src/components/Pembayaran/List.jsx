@@ -57,7 +57,7 @@ export default function List() {
       <table className="table">
         <thead>
           <tr>
-            <th>Nama Peminjman</th>
+            <th>Nama Peminjaman</th>
             <th>Tanggal Pinjam</th>
             <th>Tanggal Bayar</th>
             <th>Jumlah Bayar</th>

@@ -94,7 +94,7 @@ export default function CreatePinjaman() {
 
   return (
     <div className="container mt-5">
-      <h2 className="mb-4">Create Pinjaman</h2>
+      <h2 className="mb-4">Create Pembayaran</h2>
       {/* Jika ada pesan error, tampilkan dalam alert bootstrap */}
       {error && <div className="alert alert-danger">{error}</div>}
       {/* Jika ada pesan sukses, tampilkan dalam alert bootstrap */}
